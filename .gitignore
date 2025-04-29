@@ -1,0 +1,43 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+*.env
+venv311
+
+# IDE configurations (e.g., PyCharm, VSCode)
+.vscode/
+.idea/
+
+# System-specific files (macOS, Windows, Linux)
+.DS_Store
+Thumbs.db
+*.swp
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Python package distribution files
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Package dependencies files
+*.bak
+*.swp
+
+# Windows installer files
+*.cab
+*.msi
+
+# Local environment files
+.env

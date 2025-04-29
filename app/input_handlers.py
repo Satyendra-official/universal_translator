@@ -1,64 +1,36 @@
-# import speech_recognition as sr
-# from pydub import AudioSegment
-# import os
-# from moviepy.editor import VideoFileClip
-
-# def get_text_input():
-#     return input("Enter text to translate: ")
-
-# def handle_audio_input(file_path):
-#     recognizer = sr.Recognizer()
-    
-#     # Convert to WAV if necessary
-#     if not file_path.endswith(".wav"):
-#         sound = AudioSegment.from_file(file_path)
-#         file_path = "temp_audio.wav"
-#         sound.export(file_path, format="wav")
-
-#     with sr.AudioFile(file_path) as source:
-#         audio_data = recognizer.record(source)
-#         try:
-#             text = recognizer.recognize_google(audio_data)
-#             return text
-#         except sr.UnknownValueError:
-#             return "Could not understand audio."
-#         except sr.RequestError as e:
-#             return f"Speech recognition error: {e}"
-        
-# def handle_video_input(video_path):
-#     video = VideoFileClip(video_path)
-#     audio_path = "extracted_audio.wav"
-#     video.audio.write_audiofile(audio_path)
-#     return handle_audio_input(audio_path)
-
-
+import ffmpeg
 import speech_recognition as sr
-from pydub import AudioSegment
-from moviepy.editor import VideoFileClip
 
 def get_text_input():
-    return input("Enter your text: ")
+    return input("Enter the text you want to translate: ")
 
-def get_audio_input(audio_path):
+
+def extract_audio_from_video(video_path, audio_path='temp_audio.wav'):
+    try:
+        ffmpeg.input(video_path).output(audio_path, format='wav').run(overwrite_output=True)
+        return audio_path
+    except ffmpeg.Error as e:
+        print("Error extracting audio:", e)
+        return None
+
+def get_text_from_audio(audio_path):
     recognizer = sr.Recognizer()
-
-    # Convert audio to WAV if needed
-    if not audio_path.endswith(".wav"):
-        sound = AudioSegment.from_file(audio_path)
-        audio_path = "converted_audio.wav"
-        sound.export(audio_path, format="wav")
-
     with sr.AudioFile(audio_path) as source:
-        audio_data = recognizer.record(source)
+        audio = recognizer.record(source)
         try:
-            return recognizer.recognize_google(audio_data)
+            text = recognizer.recognize_google(audio)
+            print(f"Recognized: {text}")
+            return text
         except sr.UnknownValueError:
-            return "Audio could not be understood."
+            print("Could not understand audio")
         except sr.RequestError as e:
-            return f"Speech recognition error: {e}"
+            print("Speech recognition error:", e)
+    return ""
 
-def get_video_input(video_path):
-    audio_path = "extracted_audio.wav"
-    video = VideoFileClip(video_path)
-    video.audio.write_audiofile(audio_path)
-    return get_audio_input(audio_path)
+def convert_mp3_to_wav(mp3_path, wav_path='temp_audio.wav'):
+    try:
+        ffmpeg.input(mp3_path).output(wav_path, format='wav', acodec='pcm_s16le', ac=1, ar='16000').run(overwrite_output=True)
+        return wav_path
+    except ffmpeg.Error as e:
+        print("Error converting MP3 to WAV:", e)
+        return None

@@ -68,6 +68,33 @@ Then follow the on-screen prompts:
 
 ---
 
+## 🌐 Common Language Codes
+
+The Universal Translator supports various languages. Below are the most common language codes:
+
+| Language      | Code | Language      | Code |
+|---------------|------|----------------|------|
+| English       | `en` | French         | `fr` |
+| Spanish       | `es` | German         | `de` |
+| Hindi         | `hi` | Chinese (Simplified) | `zh-CN` |
+| Japanese      | `ja` | Korean         | `ko` |
+| Arabic        | `ar` | Portuguese     | `pt` |
+| Russian       | `ru` | Italian        | `it` |
+| Bengali       | `bn` | Urdu           | `ur` |
+| Turkish       | `tr` | Tamil          | `ta` |
+| Dutch         | `nl` | Gujarati       | `gu` |
+| Marathi       | `mr` | Telugu         | `te` |
+| Malayalam     | `ml` | Kannada        | `kn` |
+| Vietnamese    | `vi` | Ukrainian      | `uk` |
+| Polish        | `pl` | Thai           | `th` |
+
+You can use any of these codes to translate the text into the target language, e.g.:
+```bash
+Enter target language code (e.g., 'es'): fr
+```
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -128,3 +155,4 @@ Made with ❤️ by Satyendra Kumar Yadav
 ```
 
 ---
+

@@ -1,47 +1,30 @@
-# from app import input_handlers, translator, output_handlers
-
-# def main():
-#     print("Welcome to the Universal Translator CLI")
-#     text = input_handlers.get_text_input()
-#     target_lang = input("Enter target language code (e.g., 'es' for Spanish, 'fr' for French): ")
-
-#     translated = translator.translate_text(text, dest_lang=target_lang)
-#     print(f"Translated Text: {translated}")
-
-#     output_handlers.output_text(translated)
-#     output_handlers.text_to_speech(translated, lang=target_lang)
-
-# if __name__ == "__main__":
-#     main()
-
-
 from app import input_handlers, translator, output_handlers
 
 def main():
-    print("Welcome to the Universal Translator CLI")
-    print("Choose input type:")
-    print("1. Text")
-    print("2. Audio file")
-    print("3. Video file")
-    choice = input("Enter choice (1/2/3): ")
+    print("🎬 Universal Translator CLI")
+    mode = input("Choose input mode (text/audio/video): ").strip().lower()
+    target_lang = input("Enter target language code (e.g., 'es'): ")
 
-    if choice == '1':
+    if mode == "text":
         text = input_handlers.get_text_input()
-    elif choice == '2':
-        path = input("Enter path to audio file (e.g., audio.mp3 or audio.wav): ")
-        text = input_handlers.get_audio_input(path)
-    elif choice == '3':
-        path = input("Enter path to video file (e.g., video.mp4): ")
-        text = input_handlers.get_video_input(path)
+
+    elif mode == 'audio':
+        path = input("Enter path to audio file: ")
+        wav_path = input_handlers.convert_mp3_to_wav(path)  # Convert to supported format
+        text = input_handlers.get_text_from_audio(wav_path)
+    # elif mode == "audio":
+    #     path = input("Enter path to audio file: ")
+    #     text = input_handlers.get_text_from_audio(path)
+    elif mode == "video":
+        path = input("Enter path to video file: ")
+        extracted_audio = input_handlers.extract_audio_from_video(path)
+        text = input_handlers.get_text_from_audio(extracted_audio)
     else:
-        print("Invalid choice.")
+        print("Invalid mode.")
         return
 
-    print(f"\nDetected Input: {text}")
-    target_lang = input("Enter target language code (e.g., 'es' for Spanish): ")
     translated = translator.translate_text(text, dest_lang=target_lang)
-
-    print(f"\nTranslated Text: {translated}")
+    print(f"\nTranslated: {translated}")
     output_handlers.output_text(translated)
     output_handlers.text_to_speech(translated, lang=target_lang)
 
