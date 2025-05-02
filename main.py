@@ -30,11 +30,9 @@ def main():
 
     elif mode == 'audio':
         path = input("Enter path to audio file: ")
-        wav_path = input_handlers.convert_mp3_to_wav(path)  # Convert to supported format
+        wav_path = input_handlers.convert_mp3_to_wav(path)  
         text = input_handlers.get_text_from_audio(wav_path)
-    # elif mode == "audio":
-    #     path = input("Enter path to audio file: ")
-    #     text = input_handlers.get_text_from_audio(path)
+
     elif mode == "video":
         path = input("Enter path to video file: ")
         extracted_audio = input_handlers.extract_audio_from_video(path)
