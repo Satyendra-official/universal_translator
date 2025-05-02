@@ -1,8 +1,28 @@
 from app import input_handlers, translator, output_handlers
 
+COMMON_LANGUAGES = {
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "zh": "Chinese (Mandarin)",
+    "hi": "Hindi",
+    "ar": "Arabic",
+    "ru": "Russian",
+    "ja": "Japanese",
+    "pt": "Portuguese"
+}
+
+def display_common_languages():
+    print("\n🌍 Common Languages:")
+    for code, name in COMMON_LANGUAGES.items():
+        print(f"{code} - {name}")
+
 def main():
     print("🎬 Universal Translator CLI")
     mode = input("Choose input mode (text/audio/video): ").strip().lower()
+    
+    display_common_languages()
     target_lang = input("Enter target language code (e.g., 'es'): ")
 
     if mode == "text":
