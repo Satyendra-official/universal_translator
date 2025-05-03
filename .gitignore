@@ -41,3 +41,19 @@ build/
 
 # Local environment files
 .env
+
+
+# Flask-generated files
+static/translated_audio.mp3
+
+# Temporary media or audio files
+temp_audio.wav
+*.mp3
+*.wav
+
+# __pycache__ inside subfolders
+**/__pycache__/
+
+# Optional: SQLite or local databases
+*.sqlite3
+*.db

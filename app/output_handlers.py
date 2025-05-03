@@ -7,7 +7,7 @@ def output_text(text):
 
 def text_to_speech(text, lang='es'):
     tts = gTTS(text=text, lang=lang)
-    tts.save("translated_audio.mp3")
+    tts.save("static/translated_audio.mp3")
 
     # Play audio based on operating system
     system_platform = platform.system()
