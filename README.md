@@ -1,9 +1,8 @@
-```markdown
 # 🌍 Universal Translator
 
 Universal Translator is a Python-based app that can take **text, audio, or video** as input, translate it into a preferred language, and return the result as **text, speech, or even a video** with replaced or subtitled audio.
 
-> 🚀 This is the CLI version — a web-based frontend will be added soon!
+> ✅ This repo includes both a CLI tool and a basic **Flask web interface**.
 
 ---
 
@@ -11,10 +10,11 @@ Universal Translator is a Python-based app that can take **text, audio, or video
 
 - ✅ Translate **text input** to any language
 - ✅ Convert translated text into **speech/audio**
+- ✅ Web-based translator (Flask interface)
 - 🛠️ Coming soon:
   - 🎙️ Voice/audio input
   - 📹 Video input (with audio extraction)
-  - 🌐 Web-based frontend (Flask/FastAPI)
+  - 🎛️ More dynamic UI/UX
 
 ---
 
@@ -27,12 +27,12 @@ Universal Translator is a Python-based app that can take **text, audio, or video
 
 ## 🔧 Installation
 
-1. Clone the repository or download the code:
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/universal_translator.git
+git clone https://github.com/Satyendra-official/universal_translator.git
 cd universal_translator
-```
+````
 
 2. Create and activate a virtual environment:
 
@@ -56,42 +56,45 @@ pip install -r requirements.txt
 
 ## 🚀 How to Use
 
+### 🖥️ CLI Mode
+
 ```bash
 python main.py
 ```
 
-Then follow the on-screen prompts:
+1. Choose input type: `text`, `audio`, or `video`
+2. Enter target language code (e.g., `fr`)
+3. See and hear the translation
 
-1. Enter text in your language
-2. The app will translate it (default: Spanish)
-3. You’ll see the translated text and hear it spoken out loud
+### 🌐 Web Interface (Flask)
+
+```bash
+python app.py
+```
+
+1. Open your browser to [http://localhost:5000](http://localhost:5000)
+2. Enter text and select target language
+3. View and listen to the translation
 
 ---
 
 ## 🌐 Common Language Codes
 
-The Universal Translator supports various languages. Below are the most common language codes:
-
-| Language      | Code | Language      | Code |
-|---------------|------|----------------|------|
-| English       | `en` | French         | `fr` |
-| Spanish       | `es` | German         | `de` |
-| Hindi         | `hi` | Chinese (Simplified) | `zh-CN` |
-| Japanese      | `ja` | Korean         | `ko` |
-| Arabic        | `ar` | Portuguese     | `pt` |
-| Russian       | `ru` | Italian        | `it` |
-| Bengali       | `bn` | Urdu           | `ur` |
-| Turkish       | `tr` | Tamil          | `ta` |
-| Dutch         | `nl` | Gujarati       | `gu` |
-| Marathi       | `mr` | Telugu         | `te` |
-| Malayalam     | `ml` | Kannada        | `kn` |
-| Vietnamese    | `vi` | Ukrainian      | `uk` |
-| Polish        | `pl` | Thai           | `th` |
-
-You can use any of these codes to translate the text into the target language, e.g.:
-```bash
-Enter target language code (e.g., 'es'): fr
-```
+| Language   | Code | Language             | Code    |
+| ---------- | ---- | -------------------- | ------- |
+| English    | `en` | French               | `fr`    |
+| Spanish    | `es` | German               | `de`    |
+| Hindi      | `hi` | Chinese (Simplified) | `zh-CN` |
+| Japanese   | `ja` | Korean               | `ko`    |
+| Arabic     | `ar` | Portuguese           | `pt`    |
+| Russian    | `ru` | Italian              | `it`    |
+| Bengali    | `bn` | Urdu                 | `ur`    |
+| Turkish    | `tr` | Tamil                | `ta`    |
+| Dutch      | `nl` | Gujarati             | `gu`    |
+| Marathi    | `mr` | Telugu               | `te`    |
+| Malayalam  | `ml` | Kannada              | `kn`    |
+| Vietnamese | `vi` | Ukrainian            | `uk`    |
+| Polish     | `pl` | Thai                 | `th`    |
 
 ---
 
@@ -101,14 +104,20 @@ Enter target language code (e.g., 'es'): fr
 universal_translator/
 │
 ├── app/
-│   ├── __init__.py
-│   ├── input_handlers.py      # Handles input (text, later audio/video)
-│   ├── translator.py          # Translation logic (Deep Translator)
+│   ├── input_handlers.py      # Handles audio/video input
 │   ├── output_handlers.py     # Outputs translated text/audio
+│   ├── translator.py          # Translation logic (Deep Translator)
 │
-├── main.py                    # Main CLI entry point
-├── requirements.txt           # All required packages
-├── README.md                  # You're here!
+├── templates/                 # Flask HTML templates
+│   └── index.html
+│
+├── static/                    # Flask static files (audio)
+│   └── translated_audio.mp3
+│
+├── main.py                    # CLI entry point
+├── app.py                     # Flask web app entry point
+├── requirements.txt
+└── README.md
 ```
 
 ---
@@ -125,9 +134,10 @@ Translated (es): Hola, ¿cómo estás?
 
 ## 📌 Dependencies
 
-- `deep-translator` – for language translation
-- `gTTS` – text-to-speech conversion
-- `pydub`, `moviepy`, `SpeechRecognition` (future use)
+* `deep-translator` – for language translation
+* `gTTS` – text-to-speech
+* `Flask` – web interface
+* `SpeechRecognition`, `ffmpeg-python`, `moviepy` – for future audio/video handling
 
 ---
 
@@ -145,14 +155,12 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## 🔮 What's Next?
 
-- 🎤 Audio input support
-- 🎬 Translate spoken content in video
-- 🌐 Web app version using Flask or FastAPI
+* 🎤 Audio input via web
+* 📹 Translate spoken content in videos
+* 💬 Upload and subtitle support
+* 📲 Deploy Flask app publicly (e.g. Render, Heroku, Fly.io)
 
 ---
 
 Made with ❤️ by Satyendra Kumar Yadav
-```
-
----
 
