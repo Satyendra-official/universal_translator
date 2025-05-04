@@ -6,16 +6,34 @@ app = Flask(__name__)
 
 LANGUAGES = {
     "en": "English",
-    "es": "Spanish",
     "fr": "French",
+    "es": "Spanish",
     "de": "German",
-    "zh": "Chinese (Mandarin)",
     "hi": "Hindi",
-    "ar": "Arabic",
-    "ru": "Russian",
+    "zh-CN": "Chinese (Simplified)",
     "ja": "Japanese",
-    "pt": "Portuguese"
+    "ko": "Korean",
+    "ar": "Arabic",
+    "pt": "Portuguese",
+    "ru": "Russian",
+    "it": "Italian",
+    "bn": "Bengali",
+    "ur": "Urdu",
+    "tr": "Turkish",
+    "ta": "Tamil",
+    "nl": "Dutch",
+    "gu": "Gujarati",
+    "mr": "Marathi",
+    "te": "Telugu",
+    "ml": "Malayalam",
+    "kn": "Kannada",
+    "vi": "Vietnamese",
+    "uk": "Ukrainian",
+    "pl": "Polish",
+    "th": "Thai"
 }
+
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
