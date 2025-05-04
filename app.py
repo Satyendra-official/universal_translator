@@ -43,7 +43,11 @@ def index():
         lang = request.form["target_lang"]
         translated_text = translate_text(text, dest_lang=lang)
         text_to_speech(translated_text, lang=lang)
-    return render_template("index.html", languages=LANGUAGES, translated_text=translated_text)
+    return render_template(
+    "index.html",
+    languages=dict(sorted(LANGUAGES.items(), key=lambda item: item[1])),
+    translated_text=translated_text
+)
 
 if __name__ == "__main__":
     app.run(debug=True)
