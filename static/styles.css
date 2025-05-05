@@ -1,3 +1,4 @@
+/* General Body Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f4f8fb;
@@ -6,13 +7,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh; /* Ensures content takes at least the full height of the screen */
 }
 
+/* Header Styling */
 h2 {
     margin-top: 40px;
     color: #333;
 }
 
+/* Form Styling */
 form {
     background: #fff;
     padding: 30px;
@@ -22,6 +26,7 @@ form {
     max-width: 600px;
 }
 
+/* Textarea Styling */
 textarea {
     width: 96%;
     padding: 10px;
@@ -31,12 +36,14 @@ textarea {
     resize: vertical;
 }
 
+/* Label Styling */
 label {
     display: block;
     margin-top: 15px;
     font-weight: bold;
 }
 
+/* Select Dropdown Styling */
 select {
     width: 100%;
     padding: 10px;
@@ -47,28 +54,26 @@ select {
     font-size: 16px;
 }
 
+/* Submit Button Styling */
 input[type="submit"] {
-    /* margin: auto; */
-    /* margin-top: 20px; */
-
-    margin: -20px -50px; 
-    position:relative;
-    top:50%; 
-    left:50%;
-
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #0078d7;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: background-color 0.3s;
 }
 
 input[type="submit"]:hover {
     background-color: #005fa3;
 }
 
+/* Translation Output Styling */
 h3 {
     margin-top: 40px;
     color: #333;
@@ -83,6 +88,35 @@ p {
     border-radius: 5px;
 }
 
+/* Audio Player Styling */
 audio {
     margin-top: 15px;
+    width: 35%;
+}
+
+/* Flexbox Layout Adjustment */
+.translated-content {
+    margin-top: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        width: 95%;
+    }
+
+    .translated-content {
+        width: 95%;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+    }
 }
