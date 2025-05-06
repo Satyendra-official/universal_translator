@@ -56,11 +56,18 @@ def index():
         # Handle audio file input (upload)
         elif input_mode == 'audio' and 'audio_file' in request.files:
             audio_file = request.files['audio_file']
-            audio_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_file.filename)
-            audio_file.save(audio_path)
+            mp3_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_file.filename)
+            audio_file.save(mp3_path)
 
-            # Convert audio to text
-            text = get_text_from_audio(audio_path)
+            from app.input_handlers import convert_mp3_to_wav  # Make sure it's imported
+
+            wav_path = os.path.join(app.config['UPLOAD_FOLDER'], 'converted_audio.wav')
+            wav_path = convert_mp3_to_wav(mp3_path, wav_path)
+
+            if wav_path:
+                text = get_text_from_audio(wav_path)
+            else:
+                text = ""
 
         # Handle video file input (upload)
         elif input_mode == 'video' and 'video_file' in request.files:

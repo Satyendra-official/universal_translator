@@ -2,10 +2,22 @@ import os
 import ffmpeg
 import speech_recognition as sr
 
+# Ensure temp directory exists
+TEMP_DIR = 'static/uploads'
+os.makedirs(TEMP_DIR, exist_ok=True)
+
 # Extract audio from video and save as a temporary wav file
-def extract_audio_from_video(video_path, audio_path='temp_audio.wav'):
+def extract_audio_from_video(video_path, audio_path=None):
+    if audio_path is None:
+        audio_path = os.path.join(TEMP_DIR, 'temp_audio.wav')
     try:
-        ffmpeg.input(video_path).output(audio_path, format='wav').run(overwrite_output=True)
+        ffmpeg.input(video_path).output(
+            audio_path,
+            format='wav',
+            acodec='pcm_s16le',
+            ac=1,
+            ar='16000'
+        ).run(overwrite_output=True)
         return audio_path
     except ffmpeg.Error as e:
         print("Error extracting audio:", e)
@@ -14,10 +26,22 @@ def extract_audio_from_video(video_path, audio_path='temp_audio.wav'):
 # Convert MP3 audio to WAV format for recognition
 def convert_mp3_to_wav(mp3_path, wav_path='temp_audio.wav'):
     try:
-        ffmpeg.input(mp3_path).output(wav_path, format='wav', acodec='pcm_s16le', ac=1, ar='16000').run(overwrite_output=True)
+        # Ensure proper codec and parameters for compatibility with speech_recognition
+        ffmpeg.input(mp3_path).output(
+            wav_path,
+            format='wav',
+            acodec='pcm_s16le',
+            ac=1,             # Mono audio
+            ar='16000'        # Sample rate 16kHz
+        ).overwrite_output().run()
+
+        # Validation: ensure file exists and is not empty
+        if not os.path.exists(wav_path) or os.path.getsize(wav_path) == 0:
+            raise Exception("WAV file was not created or is empty.")
         return wav_path
+
     except ffmpeg.Error as e:
-        print("Error converting MP3 to WAV:", e)
+        print("FFmpeg conversion error:", e.stderr.decode() if e.stderr else str(e))
         return None
 
 # Handle text input from the user
