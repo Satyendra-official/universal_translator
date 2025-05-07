@@ -69,7 +69,7 @@
         {% if audio_file_path %}
             <h4>Translated Audio:</h4>
             <audio controls>
-                <source src="{{ url_for('static', filename='translated_audio.mp3') }}" type="audio/mpeg">
+                <source src="{{ url_for('static', filename='translated_audio.mp3') }}?v={{ timestamp }}" type="audio/mpeg">
             </audio>
         {% endif %}
     {% endif %}

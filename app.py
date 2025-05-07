@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+from datetime import datetime
 from app.translator import translate_text
 from app.output_handlers import text_to_speech
 from app.input_handlers import get_text_input, get_text_from_audio, extract_audio_from_video
@@ -44,6 +45,7 @@ LANGUAGES = {
 def index():
     translated_text = ""
     audio_file_path = None
+    timestamp = datetime.now().timestamp()  # cache-busting timestamp
 
     if request.method == "POST":
         input_mode = request.form['input_mode']  # Get input mode (text/audio/video)
@@ -89,7 +91,8 @@ def index():
         "index.html",
         languages=dict(sorted(LANGUAGES.items(), key=lambda item: item[1])),
         translated_text=translated_text,
-        audio_file_path=audio_file_path
+        audio_file_path=audio_file_path,
+        timestamp=timestamp  # pass to template
     )
 
 if __name__ == "__main__":
