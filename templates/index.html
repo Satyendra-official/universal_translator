@@ -8,13 +8,9 @@
         // Function to show and hide inputs based on the selected mode
         function toggleInputMode() {
             const inputMode = document.querySelector('input[name="input_mode"]:checked').value;
-
-            // Hide all input fields first
             document.getElementById('text_input').style.display = 'none';
             document.getElementById('audio_input').style.display = 'none';
             document.getElementById('video_input').style.display = 'none';
-
-            // Show the selected input field
             if (inputMode === 'text') {
                 document.getElementById('text_input').style.display = 'block';
             } else if (inputMode === 'audio') {
@@ -24,9 +20,30 @@
             }
         }
 
-        // Initialize the page with the correct input field visibility
+        // Handle feedback submission
+        function submitFeedback() {
+            const inputText = document.getElementById('input_text').value;
+            const translatedText = document.getElementById('translated_text').value;
+            const expectedText = document.getElementById('expected_text').value;
+            const context = document.getElementById('context').value;
+            fetch('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    input_text: inputText,
+                    translated_text: translatedText,
+                    expected: expectedText,
+                    context: context
+                })
+            })
+            .then(response => response.json())
+            .then(data => alert('Feedback submitted!'))
+            .catch(error => alert('Error submitting feedback: ' + error));
+        }
+
+        // Initialize the page
         window.onload = function() {
-            toggleInputMode(); // Ensure the right input field is visible when the page loads
+            toggleInputMode();
         };
     </script>
 </head>
@@ -60,18 +77,38 @@
             {% endfor %}
         </select><br><br>
 
+        <label>Translation Context:</label>
+        <select name="context">
+            <option value="general" {% if request.form['context'] == 'general' %}selected{% endif %}>General</option>
+            <option value="formal" {% if request.form['context'] == 'formal' %}selected{% endif %}>Formal</option>
+            <option value="informal" {% if request.form['context'] == 'informal' %}selected{% endif %}>Informal</option>
+            <option value="theater" {% if request.form['context'] == 'theater' %}selected{% endif %}>Theater</option>
+            <option value="business" {% if request.form['context'] == 'business' %}selected{% endif %}>Business</option>
+        </select><br><br>
+
         <input type="submit" value="Translate">
     </form>
 
     {% if translated_text %}
-        <h3>Translation:</h3> 
-        <p>{{ translated_text }}</p>
-        {% if audio_file_path %}
-            <h4>Translated Audio:</h4>
-            <audio controls>
-                <source src="{{ url_for('static', filename='translated_audio.mp3') }}?v={{ timestamp }}" type="audio/mpeg">
-            </audio>
-        {% endif %}
+        <div class="translated-content">
+            <h3>Translation:</h3> 
+            <p>{{ translated_text }}</p>
+            {% if audio_file_path %}
+                <h4>Translated Audio:</h4>
+                <audio controls>
+                    <source src="{{ url_for('static', filename='translated_audio.mp3') }}?v={{ timestamp }}" type="audio/mpeg">
+                </audio>
+            {% endif %}
+            <h4>Report Translation Error:</h4>
+            <form id="feedback_form" onsubmit="event.preventDefault(); submitFeedback();">
+                <input type="hidden" id="input_text" value="{{ input_text }}">
+                <input type="hidden" id="translated_text" value="{{ translated_text }}">
+                <input type="hidden" id="context" value="{{ request.form.get('context', 'general') }}">
+                <label>Expected Translation:</label><br>
+                <textarea id="expected_text" rows="4" cols="50" placeholder="Enter the correct translation..."></textarea><br><br>
+                <input type="submit" value="Submit Feedback">
+            </form>
+        </div>
     {% endif %}
 </body>
 </html>

@@ -45,15 +45,17 @@ LANGUAGES = {
 def index():
     translated_text = ""
     audio_file_path = None
+    input_text = ""
     timestamp = datetime.now().timestamp()  # cache-busting timestamp
 
     if request.method == "POST":
         input_mode = request.form['input_mode']  # Get input mode (text/audio/video)
         target_lang = request.form["target_lang"]  # Get target language
+        context = request.form.get("context", "general")  # Get context, default to "general"
 
         # Handle text input
         if input_mode == 'text':
-            text = get_text_input(request.form["text"])
+            input_text = get_text_input(request.form["text"])
 
         # Handle audio file input (upload)
         elif input_mode == 'audio' and 'audio_file' in request.files:
@@ -61,15 +63,14 @@ def index():
             mp3_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_file.filename)
             audio_file.save(mp3_path)
 
-            from app.input_handlers import convert_mp3_to_wav  # Make sure it's imported
-
+            from app.input_handlers import convert_mp3_to_wav
             wav_path = os.path.join(app.config['UPLOAD_FOLDER'], 'converted_audio.wav')
             wav_path = convert_mp3_to_wav(mp3_path, wav_path)
 
             if wav_path:
-                text = get_text_from_audio(wav_path)
+                input_text = get_text_from_audio(wav_path)
             else:
-                text = ""
+                input_text = ""
 
         # Handle video file input (upload)
         elif input_mode == 'video' and 'video_file' in request.files:
@@ -77,12 +78,11 @@ def index():
             video_path = os.path.join(app.config['UPLOAD_FOLDER'], video_file.filename)
             video_file.save(video_path)
 
-            # Extract audio from video and convert to text
             audio_path = extract_audio_from_video(video_path)
-            text = get_text_from_audio(audio_path)
+            input_text = get_text_from_audio(audio_path)
 
         # Translate the text
-        translated_text = translate_text(text, dest_lang=target_lang)
+        translated_text = translate_text(input_text, dest_lang=target_lang, context=context)
 
         # Generate speech from translated text
         audio_file_path = text_to_speech(translated_text, lang=target_lang)
@@ -91,11 +91,17 @@ def index():
         "index.html",
         languages=dict(sorted(LANGUAGES.items(), key=lambda item: item[1])),
         translated_text=translated_text,
+        input_text=input_text,  # Pass input text for feedback
         audio_file_path=audio_file_path,
-        timestamp=timestamp  # pass to template
+        timestamp=timestamp
     )
+
+@app.route("/feedback", methods=["POST"])
+def save_feedback():
+    data = request.json
+    with open("feedback.txt", "a") as f:
+        f.write(f"Input: {data['input_text']}, Translation: {data['translated_text']}, Expected: {data['expected']}, Context: {data['context']}\n")
+    return {"status": "Feedback saved"}
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
