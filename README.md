@@ -1,42 +1,40 @@
-# 🌍 Universal Translator
+🌍 Universal Translator
+Universal Translator is a Python-based application that translates text, audio, or video inputs into a preferred language, delivering outputs as text, speech, or video with replaced or subtitled audio.
 
-Universal Translator is a Python-based app that can take **text, audio, or video** as input, translate it into a preferred language, and return the result as **text, speech, or even a video** with replaced or subtitled audio.
+✅ Includes a CLI tool and a Flask web interface for seamless interaction.
 
-> ✅ This repo includes both a CLI tool and a basic **Flask web interface**.
 
----
+📦 Features
 
-## 📦 Features
+✅ Translate text input to any supported language
+✅ Convert translated text to speech/audio
+✅ Web-based interface powered by Flask
+✅ Audio input support (beta)
+🛠️ In progress:
+📹 Video input with audio extraction
+🎬 Video output with subtitles or dubbed audio
+🎨 Enhanced UI/UX with modern styling
 
-- ✅ Translate **text input** to any language
-- ✅ Convert translated text into **speech/audio**
-- ✅ Web-based translator (Flask interface)
-- 🛠️ Coming soon:
-  - 🎙️ Voice/audio input
-  - 📹 Video input (with audio extraction)
-  - 🎛️ More dynamic UI/UX
 
----
 
-## 🛠 Requirements
 
-- Python 3.11 (⚠️ Python 3.12 is not recommended due to dependency issues)
-- Virtual environment recommended
+🛠 Requirements
 
----
+Python 3.11 (⚠️ Python 3.12 not recommended due to dependency compatibility)
+Virtual environment strongly recommended
+FFmpeg installed for audio/video processing (required for future features)
 
-## 🔧 Installation
 
-1. Clone the repository:
+🔧 Installation
 
-```bash
+Clone the repository:
+
 git clone https://github.com/Satyendra-official/universal_translator.git
 cd universal_translator
-````
 
-2. Create and activate a virtual environment:
 
-```bash
+Create and activate a virtual environment:
+
 # Windows
 python -m venv venv
 venv\Scripts\activate
@@ -44,123 +42,190 @@ venv\Scripts\activate
 # macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
-```
 
-3. Install dependencies:
 
-```bash
+Install dependencies:
+
 pip install -r requirements.txt
-```
 
----
 
-## 🚀 How to Use
+Install FFmpeg (for audio/video features):
 
-### 🖥️ CLI Mode
 
-```bash
+Windows: Download from FFmpeg website or install via Chocolatey (choco install ffmpeg)
+macOS: brew install ffmpeg
+Linux: sudo apt-get install ffmpeg (Ubuntu/Debian) or equivalent
+
+
+🚀 How to Use
+🖥️ CLI Mode
 python main.py
-```
 
-1. Choose input type: `text`, `audio`, or `video`
-2. Enter target language code (e.g., `fr`)
-3. See and hear the translation
 
-### 🌐 Web Interface (Flask)
+Select input type: text, audio (beta), or video (coming soon)
+Enter target language code (e.g., fr for French)
+View or hear the translated output
 
-```bash
+🌐 Web Interface (Flask)
 python app.py
-```
 
-1. Open your browser to [http://localhost:5000](http://localhost:5000)
-2. Enter text and select target language
-3. View and listen to the translation
 
----
+Navigate to http://localhost:5000 in your browser
+Input text or upload audio (beta)
+Select target language
+View or listen to the translated result
 
-## 🌐 Common Language Codes
 
-| Language   | Code | Language             | Code    |
-| ---------- | ---- | -------------------- | ------- |
-| English    | `en` | French               | `fr`    |
-| Spanish    | `es` | German               | `de`    |
-| Hindi      | `hi` | Chinese (Simplified) | `zh-CN` |
-| Japanese   | `ja` | Korean               | `ko`    |
-| Arabic     | `ar` | Portuguese           | `pt`    |
-| Russian    | `ru` | Italian              | `it`    |
-| Bengali    | `bn` | Urdu                 | `ur`    |
-| Turkish    | `tr` | Tamil                | `ta`    |
-| Dutch      | `nl` | Gujarati             | `gu`    |
-| Marathi    | `mr` | Telugu               | `te`    |
-| Malayalam  | `ml` | Kannada              | `kn`    |
-| Vietnamese | `vi` | Ukrainian            | `uk`    |
-| Polish     | `pl` | Thai                 | `th`    |
+🌐 Common Language Codes
 
----
 
-## 📁 Project Structure
 
-```
+Language
+Code
+Language
+Code
+
+
+
+English
+en
+French
+fr
+
+
+Spanish
+es
+German
+de
+
+
+Hindi
+hi
+Chinese (Simplified)
+zh-CN
+
+
+Japanese
+ja
+Korean
+ko
+
+
+Arabic
+ar
+Portuguese
+pt
+
+
+Russian
+ru
+Italian
+it
+
+
+Bengali
+bn
+Urdu
+ur
+
+
+Turkish
+tr
+Tamil
+ta
+
+
+Dutch
+nl
+Gujarati
+gu
+
+
+Marathi
+mr
+Telugu
+te
+
+
+Malayalam
+ml
+Kannada
+kn
+
+
+Vietnamese
+vi
+Ukrainian
+uk
+
+
+Polish
+pl
+Thai
+th
+
+
+
+Note: Additional languages may be supported; check deep-translator documentation.
+
+
+📁 Project Structure
 universal_translator/
 │
 ├── app/
-│   ├── input_handlers.py      # Handles audio/video input
-│   ├── output_handlers.py     # Outputs translated text/audio
-│   ├── translator.py          # Translation logic (Deep Translator)
+│   ├── input_handlers.py      # Text, audio, and video input processing
+│   ├── output_handlers.py     # Generates text, audio, and video outputs
+│   ├── translator.py          # Core translation logic (deep-translator)
 │
 ├── templates/                 # Flask HTML templates
-│   └── index.html
+│   └── index.html             # Main web interface
 │
-├── static/                    # Flask static files (audio)
-│   └── translated_audio.mp3
+├── static/                    # Static assets
+│   ├── css/                   # Custom styles
+│   ├── js/                    # Client-side scripts
+│   └── audio/                 # Translated audio files
 │
 ├── main.py                    # CLI entry point
 ├── app.py                     # Flask web app entry point
-├── requirements.txt
-└── README.md
-```
+├── requirements.txt           # Project dependencies
+└── README.md                  # Project documentation
 
----
 
-## ✅ Example
-
-```text
+✅ Example
 Input: Hello, how are you?
-Translated (es): Hola, ¿cómo estás?
+Target Language: Spanish (`es`)
+Output: Hola, ¿cómo estás?
 [Audio plays in Spanish]
-```
 
----
 
-## 📌 Dependencies
+📌 Dependencies
 
-* `deep-translator` – for language translation
-* `gTTS` – text-to-speech
-* `Flask` – web interface
-* `SpeechRecognition`, `ffmpeg-python`, `moviepy` – for future audio/video handling
+deep-translator – Language translation
+gTTS – Text-to-speech conversion
+Flask – Web framework
+SpeechRecognition – Audio input processing (beta)
+ffmpeg-python – Audio/video manipulation
+moviepy – Video processing (for future video features)
 
----
 
-## 💡 License
+💡 License
+MIT License — free to use, modify, and distribute.
 
-MIT License — feel free to use, modify, and share.
+🤝 Contributing
+Contributions are welcome! For major changes:
 
----
+Open an issue to discuss your idea
+Fork the repository and create a pull request
+Ensure code follows PEP 8 and includes tests (if applicable)
 
-## 🤝 Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss.
+🔮 What's Next?
 
----
+🎙️ Full audio input support with improved accuracy
+📹 Video input/output with subtitle and dubbing capabilities
+🌐 Public deployment options (e.g., Render, Heroku, Fly.io)
+🎨 Modernized UI with Tailwind CSS or Bootstrap
+⚡ Performance optimizations for faster translations
 
-## 🔮 What's Next?
-
-* 🎤 Audio input via web
-* 📹 Translate spoken content in videos
-* 💬 Upload and subtitle support
-* 📲 Deploy Flask app publicly (e.g. Render, Heroku, Fly.io)
-
----
 
 Made with ❤️ by Satyendra Kumar Yadav
-
