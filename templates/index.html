@@ -11,12 +11,15 @@
             document.getElementById('text_input').style.display = 'none';
             document.getElementById('audio_input').style.display = 'none';
             document.getElementById('video_input').style.display = 'none';
+            document.getElementById('speech_input').style.display = 'none';
             if (inputMode === 'text') {
                 document.getElementById('text_input').style.display = 'block';
             } else if (inputMode === 'audio') {
                 document.getElementById('audio_input').style.display = 'block';
             } else if (inputMode === 'video') {
                 document.getElementById('video_input').style.display = 'block';
+            } else if (inputMode === 'speech') {
+                document.getElementById('speech_input').style.display = 'block';
             }
         }
 
@@ -41,9 +44,72 @@
             .catch(error => alert('Error submitting feedback: ' + error));
         }
 
+        // Speech-to-Text functionality
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Sorry, your browser doesn't support the Web Speech API.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false; // Stop after one utterance
+            recognition.interimResults = true; // Show partial results
+            recognition.lang = 'en-US'; // Default language (can be dynamic)
+
+            const startSpeechBtn = document.getElementById('startSpeechBtn');
+            const stopSpeechBtn = document.getElementById('stopSpeechBtn');
+            const speechStatus = document.getElementById('speechStatus');
+            const textInput = document.querySelector('textarea[name="text"]');
+
+            startSpeechBtn.addEventListener('click', () => {
+                recognition.start();
+                startSpeechBtn.disabled = true;
+                stopSpeechBtn.disabled = false;
+                speechStatus.textContent = 'Listening...';
+                textInput.value = ''; // Clear previous text
+            });
+
+            stopSpeechBtn.addEventListener('click', () => {
+                recognition.stop();
+            });
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                textInput.value = finalTranscript + interimTranscript;
+                speechStatus.textContent = finalTranscript ? 'Transcription complete' : 'Processing...';
+            };
+
+            recognition.onerror = (event) => {
+                speechStatus.textContent = 'Error: ' + event.error;
+                startSpeechBtn.disabled = false;
+                stopSpeechBtn.disabled = true;
+            };
+
+            recognition.onend = () => {
+                startSpeechBtn.disabled = false;
+                stopSpeechBtn.disabled = true;
+                if (!speechStatus.textContent.startsWith('Error')) {
+                    speechStatus.textContent = textInput.value ? 'Transcription complete' : 'No speech detected';
+                }
+            };
+        }
+
         // Initialize the page
         window.onload = function() {
             toggleInputMode();
+            initSpeechRecognition();
         };
     </script>
 </head>
@@ -53,12 +119,14 @@
         <label>Select Input Mode:</label><br>
         <input type="radio" name="input_mode" value="text" checked onclick="toggleInputMode()"> Text
         <input type="radio" name="input_mode" value="audio" onclick="toggleInputMode()"> Audio
-        <input type="radio" name="input_mode" value="video" onclick="toggleInputMode()"> Video<br><br>
+        <input type="radio" name="input_mode" value="video" onclick="toggleInputMode()"> Video
+        <input type="radio" name="input_mode" value="speech" onclick="toggleInputMode()"> Speech<br><br>
 
-        <!-- Text Input -->
-        <div id="text_input">
-            <textarea name="text" rows="4" cols="50" placeholder="Enter text to translate...">{{ request.form['text'] if request.form['input_mode'] == 'text' else '' }}</textarea><br><br>
-        </div>
+        <!-- Shared Text Input -->
+        <textarea name="text" rows="4" cols="50" placeholder="Enter or speak text to translate...">{{ request.form['text'] if request.form['input_mode'] in ['text', 'speech'] else '' }}</textarea><br><br>
+
+        <!-- Text Input (empty, for mode consistency) -->
+        <div id="text_input"></div>
 
         <!-- Audio Input (file upload) -->
         <div id="audio_input" style="display:none;">
@@ -68,6 +136,13 @@
         <!-- Video Input (file upload) -->
         <div id="video_input" style="display:none;">
             <input type="file" name="video_file" accept="video/*"><br><br>
+        </div>
+
+        <!-- Speech Input -->
+        <div id="speech_input" style="display:none;">
+            <button type="button" id="startSpeechBtn">Start Speaking</button>
+            <button type="button" id="stopSpeechBtn" disabled>Stop Speaking</button>
+            <p id="speechStatus">Press "Start Speaking" to begin.</p><br>
         </div>
 
         <label>Target Language:</label>
